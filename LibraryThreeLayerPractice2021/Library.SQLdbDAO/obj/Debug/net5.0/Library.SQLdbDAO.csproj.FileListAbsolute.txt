@@ -1,0 +1,12 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\bin\Debug\net5.0\Library.SQLdbDAO.deps.json
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\bin\Debug\net5.0\Library.SQLdbDAO.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\bin\Debug\net5.0\ref\Library.SQLdbDAO.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\bin\Debug\net5.0\Library.SQLdbDAO.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.csproj.AssemblyReference.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.AssemblyInfoInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.AssemblyInfo.cs
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\ref\Library.SQLdbDAO.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayerPractice2021\Library.SQLdbDAO\obj\Debug\net5.0\Library.SQLdbDAO.pdb
