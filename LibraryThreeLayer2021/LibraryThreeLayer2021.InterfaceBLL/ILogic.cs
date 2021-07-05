@@ -99,7 +99,7 @@ namespace LibraryThreeLayer2021.BLL.InterfaceBLL
 
         bool UpdateGenre(long ID, string name, string desc);
 
-        bool UpdateUser(string username, byte sex, string customName = null);
+        bool UpdateUser(string username, bool sex, string customName = null);
 
         bool UpdateUserPass(string username, string newPass);
     }

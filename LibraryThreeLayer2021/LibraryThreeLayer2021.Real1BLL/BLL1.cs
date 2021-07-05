@@ -374,7 +374,7 @@ namespace LibraryThreeLayer2021.BLL.Real1BLL
             return _dao.UpdateGenre(ID, name, desc);
         }
 
-        public bool UpdateUser(string username, byte sex, string customName = null)
+        public bool UpdateUser(string username, bool sex, string customName = null)
         {
             return _dao.UpdateUser(username, sex, customName);
         }

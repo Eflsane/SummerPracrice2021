@@ -1217,7 +1217,7 @@ namespace LibraryThreeLayer2021.DAL.SqlDAL
             }
         }
 
-        public bool UpdateUser(string username, byte sex, string customName = null)
+        public bool UpdateUser(string username, bool sex, string customName = null)
         {
             using (_connection = new SqlConnection(_connectionString))
             {

@@ -330,6 +330,11 @@ namespace LibraryThreeLayer2021.ConsolePL
                         while (!DrawFavoriteBooksOfUser(user));
                         return false;
                     }
+                case "5":
+                    {
+                        while (!DrawSingleUserInterface(user));
+                        return false;
+                    }
                 case "6":
                     {
                         Environment.Exit(0);
@@ -1761,6 +1766,141 @@ namespace LibraryThreeLayer2021.ConsolePL
                         }
 
                         while (!DrawSingleBookInterface(favBooks[bookIndex])) ;
+                        return false;
+                    }
+            }
+        }
+
+        private static bool DrawSingleUserInterface(User watchedUser)
+        {
+            Console.Clear();
+
+            Console.WriteLine("This is " + (watchedUser.CustomName != null ? watchedUser.CustomName : watchedUser.Username).ToUpper() + " " + (watchedUser.IsAdmin ? "Admin" : ""));
+            Console.WriteLine("Username: " + watchedUser.Username);
+            Console.WriteLine("Custom name: " + watchedUser.CustomName);
+            Console.WriteLine("Sex: " + (watchedUser.Sex ? "Female" : "Male"));
+            Console.WriteLine("Register date: " + watchedUser.RegDate);
+
+
+            Console.WriteLine("X. Go back");
+            Console.WriteLine("1. Favorites");
+            Console.WriteLine("2. Change user's attributes");
+            Console.WriteLine("3. Delete user");
+
+
+            string input = Console.ReadLine().ToLower();
+
+            switch (input)
+            {
+                case "x":
+                    {
+                        return true;
+                    }
+                case "1":
+                    {
+                        while(!DrawSingleUserInterface(watchedUser));
+                        return false;
+                    }
+                case "2":
+                    {
+                        Console.WriteLine("Choose which attribute to change");
+                        Console.WriteLine("1. Custom name");
+                        Console.WriteLine("2. Sex");
+
+
+                        switch (Console.ReadLine())
+                        {
+                            case "1":
+                                {
+                                    Console.WriteLine("Enter new custom name:");
+                                    string newCustomName = Console.ReadLine().ToLower();
+
+                                    if (newCustomName.Equals(string.Empty))
+                                    {
+                                        newCustomName = null;
+                                    }
+
+                                    if (!_bll.UpdateUser(watchedUser.Username, watchedUser.Sex, newCustomName))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Changes successfully saved");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            case "2":
+                                {
+                                    Console.WriteLine("Which sex you prefer to change into");
+                                    Console.WriteLine("F. Female");
+                                    Console.WriteLine("M. Male");
+
+                                    bool newSex = false;
+                                    switch(Console.ReadLine().ToLower())
+                                    {
+                                        case "f":
+                                            {
+                                                newSex = true;
+                                                break;                                               
+                                            }
+                                        case "m":
+                                            {
+                                                newSex = false;
+                                                break;
+                                            }
+                                        default:
+                                            {
+                                                Console.WriteLine("Operation canceled. Going back");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                    }
+
+                                    if (!_bll.UpdateUser(watchedUser.Username, newSex, watchedUser.CustomName))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Sex successfully switched");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            default:
+                                {
+                                    Console.WriteLine("Operation canceled. Going back");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                        }
+                    }
+                case "3":
+                    {
+                        if(!_bll.DeleteUser(watchedUser.Username))
+                        {
+                            Console.WriteLine("An error occured. Nothing happend");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+
+                        Console.WriteLine("User has been deleted");
+                        Console.WriteLine("Press any key");
+                        Console.ReadKey();
+                        if (user.Username.Equals(watchedUser.Username)) Environment.Exit(0);
+                        return true;
+                    }
+                default:
+                    {
                         return false;
                     }
             }
