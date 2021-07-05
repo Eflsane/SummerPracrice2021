@@ -325,6 +325,11 @@ namespace LibraryThreeLayer2021.ConsolePL
                         while (!DrawGenresInterface());
                         return false;
                     }
+                case "4":
+                    {
+                        while (!DrawFavoriteBooksOfUser(user));
+                        return false;
+                    }
                 case "6":
                     {
                         Environment.Exit(0);
@@ -340,7 +345,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                         return false;
                     }
             }
-        }       
+        }
 
         private static bool DrawBooksInterface()
         {
@@ -632,17 +637,19 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             Console.WriteLine("X. Go back");
             Console.WriteLine("1. Download book to your pc");
-            Console.WriteLine("2. Look for other books of this author");
-            Console.WriteLine("3. Choose genre from this book and find others with this genre");
+            Console.WriteLine("2. Add book to favorite");
+            Console.WriteLine("3. Remove book from favorite");
+            Console.WriteLine("3. Look for other books of this author");
+            Console.WriteLine("4. Choose genre from this book and find others with this genre");
 
             if(user.IsAdmin)
             {
-                Console.WriteLine("4. Change book attributes");
-                Console.WriteLine("5. Correct author's attributes");
-                Console.WriteLine("6. Change author to another");
-                Console.WriteLine("7. Add genre to book");
-                Console.WriteLine("8. Remove genre from book");
-                Console.WriteLine("9. Delete book");
+                Console.WriteLine("5. Change book attributes");
+                Console.WriteLine("6. Correct author's attributes");
+                Console.WriteLine("7. Change author to another");
+                Console.WriteLine("8. Add genre to book");
+                Console.WriteLine("9. Remove genre from book");
+                Console.WriteLine("10. Delete book");
             }
 
             string input = Console.ReadLine().ToLower();
@@ -689,10 +696,34 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "2":
                     {
-                        while (!DrawSingleAuthorInterface(author));
+                        if(!_bll.AddBookToFavorite(user.Username, book.ID))
+                        {
+                            Console.WriteLine("An error occured. Nothing happend");
+                            Console.WriteLine("Press any key");
+                            return false;
+                        }
+                        Console.WriteLine("Book added to favorite");
+                        Console.WriteLine("Press any key");
                         return false;
                     }
                 case "3":
+                    {
+                        if (!_bll.DeleteFavBookFromUser(user.Username, book.ID))
+                        {
+                            Console.WriteLine("An error occured. This book is not in favorites of this user");
+                            Console.WriteLine("Press any key");
+                            return false;
+                        }
+                        Console.WriteLine("Book removed from favorite");
+                        Console.WriteLine("Press any key");
+                        return false;
+                    }
+                case "4":
+                    {
+                        while (!DrawSingleAuthorInterface(author));
+                        return false;
+                    }
+                case "5":
                     {
                         Console.WriteLine("Type genre number to proceed or type something else to cancel");
                         for(int i = 0; i < genres.Count; i++)
@@ -720,7 +751,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                         
                         switch (input)
                         {
-                            case "4":
+                            case "6":
                                 {
                                     Console.WriteLine("Choose which attribute to change");
                                     Console.WriteLine("1. Name");
@@ -859,7 +890,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                             }
                                     }
                                 }
-                            case "5":
+                            case "7":
                                 {
                                     Console.WriteLine("Choose which attribute to change");
                                     Console.WriteLine("1. Secondname");
@@ -929,7 +960,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                             }
                                     }
                                 }
-                            case "6":
+                            case "8":
                                 {
                                     Console.WriteLine("Search for new author for the book");
                                     Console.WriteLine("Enter author secondname or firstname");
@@ -970,7 +1001,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.ReadKey();
                                     return false;
                                 }
-                            case "7":
+                            case "9":
                                 {
                                     List<Genre> allGenres = _bll.GetAllGenres();
                                     if (allGenres.Count <= 0)
@@ -1008,7 +1039,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.ReadKey();
                                     return false;
                                 }
-                            case "8":
+                            case "10":
                                 {
                                     if(genres.Count <= 0)
                                     {
@@ -1045,7 +1076,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.ReadKey();
                                     return false;
                                 }
-                            case "9":
+                            case "11":
                                 {
                                     if(!_bll.DeleteBookByID(book.ID))
                                     {
@@ -1649,6 +1680,88 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     return false;
                                 }
                         }
+                    }
+            }
+        }
+
+        private static bool DrawFavoriteBooksOfUser(User user)
+        {
+            Console.Clear();
+
+            Console.WriteLine("My favorite books   by " + (user.CustomName != null? user.CustomName: user.Username).ToUpper());
+            Console.WriteLine("X. Go back");
+            Console.WriteLine("R. Remove a book from favorites");
+
+            List<Book> favBooks = _bll.GetFavBooksOfUser(user.Username);
+            if(favBooks.Count <= 0)
+            {
+                Console.WriteLine("This user does't have favorite books");
+            }
+            else
+            {
+                for(int i = 0; i < favBooks.Count; i++)
+                {
+                    Author author = _bll.GetAuthorByID(favBooks[i].AuthorID);
+                    Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " " + favBooks[i].Name + " " + favBooks[i].PublicationDate.Year);
+                }
+            }
+
+            string input = Console.ReadLine().ToLower();
+
+            switch (input)
+            {
+                case "x":
+                    {
+                        return true;
+                    }
+                case "r":
+                    {
+
+                        if (favBooks.Count <= 0)
+                        {
+                            Console.WriteLine("No books are favorite for this user");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+                        for (int i = 0; i < favBooks.Count; i++)
+                        {
+                            Console.WriteLine(i + ". " + favBooks[i].Name + " " + favBooks[i].PublicationDate.Year);
+                        }
+                        Console.WriteLine("Choose book by typing it's number in the list");
+                        string listNumer = Console.ReadLine();
+                        int listIndex = -1;
+                        if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < favBooks.Count))
+                        {
+                            Console.WriteLine("Incorrect input! Abort mission!");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+
+                        if (!_bll.DeleteFavBookFromUser(user.Username, favBooks[listIndex].ID))
+                        {
+                            Console.WriteLine("An error occured. This book is not in favorites of this user");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+
+                        Console.WriteLine("Book successfully removed from favorites");
+                        Console.WriteLine("Press any key");
+                        Console.ReadKey();
+                        return false;
+                    }
+                default:
+                    {
+                        int bookIndex = -1;
+                        if (!int.TryParse(input, out bookIndex) || !(bookIndex > -1 && bookIndex < favBooks.Count))
+                        {
+                            return false;
+                        }
+
+                        while (!DrawSingleBookInterface(favBooks[bookIndex])) ;
+                        return false;
                     }
             }
         }
