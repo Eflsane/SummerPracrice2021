@@ -304,6 +304,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("3. Show me genres");
             Console.WriteLine("4. Show me my favorite books");
             Console.WriteLine("5. Show me my profile");
+            if (user.IsAdmin) Console.WriteLine("U. show all users");
             Console.WriteLine("6. Begone out of here");
             Console.WriteLine("7. Jump out from profile");
 
@@ -316,7 +317,12 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "2":
                     {
-                        while (!DrawAuthorsInterface()) ;
+                        while (!DrawAuthorsInterface());
+                        return false;
+                    }
+                case "3":
+                    {
+                        while (!DrawGenresInterface());
                         return false;
                     }
                 case "6":
@@ -334,7 +340,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                         return false;
                     }
             }
-        }
+        }       
 
         private static bool DrawBooksInterface()
         {
@@ -519,9 +525,17 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             Console.WriteLine("Enter book name");
             string bookName = Console.ReadLine();
+            if (bookName.Equals(string.Empty))
+            {
+                Console.WriteLine("Empty string detected. Operation canceled");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+                return;
+            }
 
             Console.WriteLine("Enter book description");
             string bookDesc = Console.ReadLine();
+
 
             Console.WriteLine("Enter date of book publication(yyyy-mm-dd)");
             string dateString = Console.ReadLine();
@@ -1155,9 +1169,23 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             Console.WriteLine("Enter author secondname");
             string authorSecondname = Console.ReadLine();
+            if (authorSecondname.Equals(string.Empty))
+            {
+                Console.WriteLine("Empty string detected. Operation canceled");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+                return;
+            }
 
             Console.WriteLine("Enter author firstname");
             string authorFirstname = Console.ReadLine();
+            if (authorFirstname.Equals(string.Empty))
+            {
+                Console.WriteLine("Empty string detected. Operation canceled");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+                return;
+            }
 
             Console.WriteLine("Enter date of book publication(yyyy-mm-dd)");
             string dateString = Console.ReadLine();
@@ -1395,6 +1423,223 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     }
 
                                     Console.WriteLine("Author has successfully deleted");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return true;
+                                }
+                            default:
+                                {
+                                    return false;
+                                }
+                        }
+                    }
+            }
+        }
+
+        private static bool DrawGenresInterface()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Doom library ");
+            Console.WriteLine("Welcome " + user);
+            Console.WriteLine("X. Back to main screen");
+
+            List<Genre> genres = _bll.GetAllGenres();
+            if (user.IsAdmin)
+            {
+                Console.WriteLine("A. Add genre");
+            }
+
+            if (genres.Count <= 0) Console.WriteLine("No genres in library at this moment");
+            else
+            {
+                for (int i = 0; i < genres.Count; i++)
+                {
+                    Console.WriteLine(i + ". " + genres[i].Name + " " + genres[i].Desc);
+                }
+            }
+
+            string input = Console.ReadLine().ToLower();
+
+            if (input == "x") return true;
+            else if (input == "a" && user.IsAdmin)
+            {
+                DrawAddGenreInterface();
+            }
+            else
+            {
+                int genreIndex = -1;
+                if (int.TryParse(input, out genreIndex))
+                {
+                    if (genreIndex > -1 && genreIndex < genres.Count)
+                    {
+                        while (!DrawSingleGenreInterface(genres[genreIndex])) ;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static void DrawAddGenreInterface()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Enter genre name");
+            string genreName = Console.ReadLine();
+            if(genreName.Equals(string.Empty))
+            {
+                Console.WriteLine("Empty string detected. Operation canceled");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Enter genre description");
+            string genreDesc = Console.ReadLine();
+
+            if (!_bll.AddGenre(genreName, genreDesc))
+            {
+                Console.WriteLine("An error occured. Abort mission!");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+            }
+        }
+
+        private static bool DrawSingleGenreInterface(Genre genre)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Name: " + genre.Name);
+
+            Console.WriteLine("Description: " + genre.Desc);
+
+            Console.WriteLine("X. Go back");
+
+            if (user.IsAdmin)
+            {
+                Console.WriteLine("C. Change genre attributes");
+                Console.WriteLine("D. Delete genre");
+            }
+
+
+            List<Book> books = _bll.GetBooksByGenreID(genre.ID);
+            if (books.Count <= 0)
+            {
+                Console.WriteLine("There is no books of this genre yet");
+            }
+            else
+            {
+                for (int i = 0; i < books.Count; i++)
+                {
+                    Author author = _bll.GetAuthorByID(books[i].AuthorID);
+                    Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " " + books[i].Name + " " + books[i].PublicationDate.Year);
+                }
+            }
+
+
+            string input = Console.ReadLine().ToLower();
+
+            switch (input)
+            {
+                case "x":
+                    {
+                        return true;
+                    }
+                default:
+                    {
+                        int bookIndex = -1;
+                        if (int.TryParse(input, out bookIndex) && (bookIndex > -1 && bookIndex < books.Count))
+                        {
+                            while (!DrawSingleBookInterface(books[bookIndex])) ;
+                            return false;
+                        }
+
+                        if (!user.IsAdmin) return false;
+
+                        switch (input)
+                        {
+                            case "c":
+                                {
+                                    Console.WriteLine("Choose which attribute to change");
+                                    Console.WriteLine("1. Name");
+                                    Console.WriteLine("2. Description");
+
+
+                                    switch (Console.ReadLine())
+                                    {
+                                        case "1":
+                                            {
+                                                Console.WriteLine("Enter new genre name:");
+                                                string newName = Console.ReadLine();
+
+                                                if (newName.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateGenre(genre.ID, newName, genre.Desc))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "2":
+                                            {
+                                                Console.WriteLine("Enter new genre description:");
+                                                string newDesc = Console.ReadLine();
+
+                                                if (newDesc.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateGenre(genre.ID, genre.Name, newDesc))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        default:
+                                            {
+                                                Console.WriteLine("Operation canceled. Going back");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                    }
+                                }
+                            case "d":
+                                {
+                                    if (!_bll.DeleteGenre(genre.ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Genre has successfully deleted");
                                     Console.WriteLine("Press any key");
                                     Console.ReadKey();
                                     return true;
