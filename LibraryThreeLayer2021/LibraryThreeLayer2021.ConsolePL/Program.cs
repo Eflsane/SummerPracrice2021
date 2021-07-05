@@ -513,7 +513,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             return true;
         }
 
-        private static void DrawAddBookInterface()
+        private static void DrawAddBookInterface(long authorID = -1)
         {
             Console.Clear();
 
@@ -535,30 +535,37 @@ namespace LibraryThreeLayer2021.ConsolePL
                 return;
             }
 
-            Console.WriteLine("Search for which author book will be added");
-            Console.WriteLine("Enter author secondname or firstname");
-            List<Author> authors =  _bll.FindAuthors(Console.ReadLine());
-            if(authors.Count <= 0)
+
+            if(authorID < 1)
             {
-                Console.WriteLine("No authors found. Maybe you want add one? Go to the 'Show me authors' menu");
-                Console.WriteLine("Press any key");
-                Console.ReadKey();
-                return;
+                Console.WriteLine("Search for which author book will be added");
+                Console.WriteLine("Enter author secondname or firstname");
+                List<Author> authors = _bll.FindAuthors(Console.ReadLine());
+                if (authors.Count <= 0)
+                {
+                    Console.WriteLine("No authors found. Maybe you want add one? Go to the 'Show me authors' menu");
+                    Console.WriteLine("Press any key");
+                    Console.ReadKey();
+                    return;
+                }
+                for (int i = 0; i < authors.Count; i++)
+                {
+                    Console.WriteLine(i + ". " + authors[i].Secondname + " " + authors[i].Firstname);
+                }
+                Console.WriteLine("Choose your author by typing his number in the list");
+                string listNumer = Console.ReadLine();
+                int listIndex = -1;
+                if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < authors.Count))
+                {
+                    Console.WriteLine("Incorrect input! Abort mission!");
+                    Console.WriteLine("Press any key");
+                    Console.ReadKey();
+                    return;
+                }
+
+                authorID = authors[listIndex].ID;
             }
-            for (int i = 0; i < authors.Count; i++)
-            {
-                Console.WriteLine(i + ". " + authors[i].Secondname + " " + authors[i].Firstname);
-            }
-            Console.WriteLine("Choose your author by typing his number in the list");
-            string listNumer = Console.ReadLine();
-            int listIndex = -1;
-            if(!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < authors.Count))
-            {
-                Console.WriteLine("Incorrect input! Abort mission!");
-                Console.WriteLine("Press any key");
-                Console.ReadKey();
-                return;
-            }
+            
 
             Console.WriteLine("Choose file with book");
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -575,7 +582,12 @@ namespace LibraryThreeLayer2021.ConsolePL
                 }
 
 
-                _bll.AddBook(bookName, bookDesc, pubDate, user.Username, authors[listIndex].ID, fileName: openFileDialog.FileName);
+                if(!_bll.AddBook(bookName, bookDesc, pubDate, user.Username, authorID, fileName: openFileDialog.FileName))
+                {
+                    Console.WriteLine("An error occured. Abort mission!");
+                    Console.WriteLine("Press any key");
+                    Console.ReadKey();
+                }
             }
             catch(FileNotFoundException e)
             {
@@ -616,6 +628,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 Console.WriteLine("6. Change author to another");
                 Console.WriteLine("7. Add genre to book");
                 Console.WriteLine("8. Remove genre from book");
+                Console.WriteLine("9. Delete book");
             }
 
             string input = Console.ReadLine().ToLower();
@@ -662,7 +675,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "2":
                     {
-                        //while (!DrawSingleAuthorInterface(author));
+                        while (!DrawSingleAuthorInterface(author));
                         return false;
                     }
                 case "3":
@@ -1018,6 +1031,21 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.ReadKey();
                                     return false;
                                 }
+                            case "9":
+                                {
+                                    if(!_bll.DeleteBookByID(book.ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Book has successfully deleted");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return true;
+                                }
                             default:
                                 {
                                     return false;
@@ -1029,7 +1057,355 @@ namespace LibraryThreeLayer2021.ConsolePL
 
         private static bool DrawAuthorsInterface()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+
+            Console.WriteLine("Doom library ");
+            Console.WriteLine("Welcome " + user);
+            Console.WriteLine("X. Back to main screen");
+            Console.WriteLine("F. Find authors");
+
+            List<Author> authors = _bll.GetAllAuthors();
+            if (user.IsAdmin)
+            {
+                Console.WriteLine("A. Add author");
+            }
+
+            if (authors.Count <= 0) Console.WriteLine("No authors in library at this moment");
+            else
+            {
+                for (int i = 0; i < authors.Count; i++)
+                {
+                    Console.WriteLine(i + ". " + authors[i].Secondname + " " + authors[i].Firstname + " " + authors[i].BirthDate.Year);
+                }
+            }
+
+            string input = Console.ReadLine().ToLower();
+
+            if (input == "f")
+            {
+                while (!DrawSearchAuthorBasicInterface()) ;
+            }
+            else if (input == "x") return true;
+            else if (input == "a" && user.IsAdmin)
+            {
+                DrawAddAuthorInterface();
+            }
+            else
+            {
+                int authorIndex = -1;
+                if (int.TryParse(input, out authorIndex))
+                {
+                    if (authorIndex > -1 && authorIndex < authors.Count)
+                    {
+                        while (!DrawSingleAuthorInterface(authors[authorIndex])) ;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool DrawSearchAuthorBasicInterface()
+        {
+
+            List<Author> searchResult = new List<Author>();
+            string searchQuerry = "";
+
+            Console.WriteLine("Enter author firstname or secondname:");
+            searchQuerry = Console.ReadLine();
+            searchResult = _bll.FindAuthors(searchQuerry);
+
+
+            Console.Clear();
+
+            Console.WriteLine("What I fond on your question:");
+
+            if (searchResult.Count <= 0)
+            {
+                Console.WriteLine("Nothing found, sorry (><)");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+
+                return true;
+            }
+
+            for (int i = 0; i < searchResult.Count; i++)
+            {
+                Console.WriteLine(i + ". " + searchResult[i].Secondname + " " + searchResult[i].Firstname + " " + searchResult[i].BirthDate.Year);
+            }
+
+            Console.WriteLine("Enter author number to proceed to the author. Otherwise enter anything else and go back");
+
+            string input = Console.ReadLine();
+            int authorIndex = -1;
+            if (int.TryParse(input, out authorIndex))
+            {
+                if (authorIndex > -1 && authorIndex < searchResult.Count)
+                {
+                    while (!DrawSingleAuthorInterface(searchResult[authorIndex]));
+                }
+            }
+
+            return true;
+        }
+
+        private static void DrawAddAuthorInterface()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Enter author secondname");
+            string authorSecondname = Console.ReadLine();
+
+            Console.WriteLine("Enter author firstname");
+            string authorFirstname = Console.ReadLine();
+
+            Console.WriteLine("Enter date of book publication(yyyy-mm-dd)");
+            string dateString = Console.ReadLine();
+            string format = "yyyy-MM-dd";
+            DateTime birthDate;
+            if (!DateTime.TryParseExact(dateString, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out birthDate))
+            {
+                Console.WriteLine("Incorrect date! Abort mission!");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+                return;
+            }
+
+             if(!_bll.AddAuthor(authorSecondname, authorFirstname, birthDate))
+            {
+                Console.WriteLine("An error occured. Abort mission!");
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
+            }
+        }
+
+        private static bool DrawSingleAuthorInterface(Author author)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Secondname: " + author.Secondname);
+
+            Console.WriteLine("Firstname: " + author.Firstname);
+
+            Console.WriteLine("Birth date: " + author.BirthDate.Year + " " + author.BirthDate.Month + " " + author.BirthDate.Day);
+
+            Console.WriteLine("X. Go back");
+
+            if(user.IsAdmin)
+            {
+                Console.WriteLine("A. Add new author's book");
+                Console.WriteLine("R. Remove book of author");
+                Console.WriteLine("C. Correct author's attributes");
+                Console.WriteLine("D. Delete author");
+            }
+            
+
+            List<Book> books = _bll.GetBooksByAuthorID(author.ID);
+            if(books.Count <= 0)
+            {
+                Console.WriteLine("This author doesn't have published books yet");
+            }
+            else
+            {
+                for(int i = 0; i < books.Count; i++)
+                {
+                    Console.WriteLine(i + ". " + books[i].Name + " " + books[i].PublicationDate.Year);
+                }
+            }
+
+
+            string input = Console.ReadLine().ToLower();
+
+            switch (input)
+            {
+                case "x":
+                    {
+                        return true;
+                    }
+                default:
+                    {
+                        int bookIndex = -1;
+                        if(int.TryParse(input, out bookIndex) && (bookIndex > -1 && bookIndex < books.Count))
+                        {
+                            while (!DrawSingleBookInterface(books[bookIndex]));
+                            return false;
+                        }
+
+                        if (!user.IsAdmin) return false;
+
+                        switch (input)
+                        {
+                            case "a":
+                                {
+                                    DrawAddBookInterface(author.ID);
+                                    return false;                                    
+                                }
+                            case "r":
+                                {
+                                    if (books.Count <= 0)
+                                    {
+                                        Console.WriteLine("No books attached to this author");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+                                    for (int i = 0; i < books.Count; i++)
+                                    {
+                                        Console.WriteLine(i + ". " + books[i].Name + " " + books[i].PublicationDate.Year);
+                                    }
+                                    Console.WriteLine("Choose book by typing it's number in the list");
+                                    string listNumer = Console.ReadLine();
+                                    int listIndex = -1;
+                                    if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < books.Count))
+                                    {
+                                        Console.WriteLine("Incorrect input! Abort mission!");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    if (!_bll.DeleteBookByID(books[listIndex].ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Book successfully deleted");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            case "c":
+                                {
+                                    Console.WriteLine("Choose which attribute to change");
+                                    Console.WriteLine("1. Secondname");
+                                    Console.WriteLine("2. Firstname");
+                                    Console.WriteLine("3. Birth date");
+
+
+                                    switch (Console.ReadLine())
+                                    {
+                                        case "1":
+                                            {
+                                                Console.WriteLine("Enter new author secondname:");
+                                                string newSecondname = Console.ReadLine();
+
+                                                if (newSecondname.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateAuthor(author.ID, newSecondname, author.Firstname, author.BirthDate))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "2":
+                                            {
+                                                Console.WriteLine("Enter new author firstname:");
+                                                string newFirstname = Console.ReadLine();
+
+                                                if (newFirstname.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateAuthor(author.ID, author.Secondname, newFirstname, author.BirthDate))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "3":
+                                            {
+                                                Console.WriteLine("Enter new author's birth date(yyyy-mm-dd):");
+                                                string stringDate = Console.ReadLine();
+
+                                                if (stringDate.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                string format = "yyyy-MM-dd";
+                                                DateTime birthDate;
+                                                if (!DateTime.TryParseExact(stringDate, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out birthDate))
+                                                {
+                                                    Console.WriteLine("Incorrect date! Abort mission!");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateAuthor(author.ID, author.Secondname, author.Firstname, birthDate))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        default:
+                                            {
+                                                Console.WriteLine("Operation canceled. Going back");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                    }
+                                }
+                            case "d":
+                                {
+                                    if(!_bll.DeleteAuthor(author.ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Author has successfully deleted");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return true;
+                                }
+                            default:
+                                {
+                                    return false;
+                                }
+                        }
+                    }
+            }
         }
     }
 }
