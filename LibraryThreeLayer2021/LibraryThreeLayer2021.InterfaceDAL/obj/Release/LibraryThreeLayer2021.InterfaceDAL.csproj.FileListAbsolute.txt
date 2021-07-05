@@ -1,0 +1,9 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\bin\Release\LibraryThreeLayer2021.InterfaceDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\bin\Release\LibraryThreeLayer2021.InterfaceDAL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\bin\Release\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\bin\Release\LibraryThreeLayer2021.Entities.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\obj\Release\LibraryThreeLayer2021.InterfaceDAL.csproj.AssemblyReference.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\obj\Release\LibraryThreeLayer2021.InterfaceDAL.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\obj\Release\LibraryThreeLayer2021.InterfaceDAL.csproj.CopyComplete
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\obj\Release\LibraryThreeLayer2021.InterfaceDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceDAL\obj\Release\LibraryThreeLayer2021.InterfaceDAL.pdb

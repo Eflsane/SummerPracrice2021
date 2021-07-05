@@ -1,0 +1,11 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.SqlDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.SqlDAL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.InterfaceDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.Entities.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\bin\Debug\LibraryThreeLayer2021.InterfaceDAL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\obj\Debug\LibraryThreeLayer2021.SqlDAL.csproj.AssemblyReference.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\obj\Debug\LibraryThreeLayer2021.SqlDAL.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\obj\Debug\LibraryThreeLayer2021.SqlDAL.csproj.CopyComplete
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\obj\Debug\LibraryThreeLayer2021.SqlDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.SqlDAL\obj\Debug\LibraryThreeLayer2021.SqlDAL.pdb

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1CDBB27F-6CFF-4C08-8C9D-7F7583C1B2AE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LibraryThreeLayer2021.Dependencies</RootNamespace>
+    <AssemblyName>LibraryThreeLayer2021.Dependencies</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryThreeLayer2021.InterfaceBLL\LibraryThreeLayer2021.InterfaceBLL.csproj">
+      <Project>{60ED4CCB-1AC1-48E8-B9EF-EF146663D6E0}</Project>
+      <Name>LibraryThreeLayer2021.InterfaceBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibraryThreeLayer2021.InterfaceDAL\LibraryThreeLayer2021.InterfaceDAL.csproj">
+      <Project>{E8623A49-5E1E-4C73-9FD1-20CE6EE4A13B}</Project>
+      <Name>LibraryThreeLayer2021.InterfaceDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibraryThreeLayer2021.Real1BLL\LibraryThreeLayer2021.Real1BLL.csproj">
+      <Project>{62CC2D81-5C5A-4756-A49B-C8EA38CE865C}</Project>
+      <Name>LibraryThreeLayer2021.Real1BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibraryThreeLayer2021.SqlDAL\LibraryThreeLayer2021.SqlDAL.csproj">
+      <Project>{9F6FE846-4D28-48BF-88BD-75F0FDA6D4E3}</Project>
+      <Name>LibraryThreeLayer2021.SqlDAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

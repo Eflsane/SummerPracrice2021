@@ -1,0 +1,9 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\bin\Release\LibraryThreeLayer2021.InterfaceBLL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\bin\Release\LibraryThreeLayer2021.InterfaceBLL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\bin\Release\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\bin\Release\LibraryThreeLayer2021.Entities.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\obj\Release\LibraryThreeLayer2021.InterfaceBLL.csproj.AssemblyReference.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\obj\Release\LibraryThreeLayer2021.InterfaceBLL.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\obj\Release\LibraryThreeLayer2021.InterfaceBLL.csproj.CopyComplete
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\obj\Release\LibraryThreeLayer2021.InterfaceBLL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.InterfaceBLL\obj\Release\LibraryThreeLayer2021.InterfaceBLL.pdb

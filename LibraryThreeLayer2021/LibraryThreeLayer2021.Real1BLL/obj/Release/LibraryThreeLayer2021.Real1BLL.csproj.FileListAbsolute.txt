@@ -1,0 +1,15 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.Real1BLL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.Real1BLL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.InterfaceBLL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.InterfaceDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.SqlDAL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.Entities.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.InterfaceBLL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.InterfaceDAL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\bin\Release\LibraryThreeLayer2021.SqlDAL.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\obj\Release\LibraryThreeLayer2021.Real1BLL.csproj.AssemblyReference.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\obj\Release\LibraryThreeLayer2021.Real1BLL.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\obj\Release\LibraryThreeLayer2021.Real1BLL.csproj.CopyComplete
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\obj\Release\LibraryThreeLayer2021.Real1BLL.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Real1BLL\obj\Release\LibraryThreeLayer2021.Real1BLL.pdb

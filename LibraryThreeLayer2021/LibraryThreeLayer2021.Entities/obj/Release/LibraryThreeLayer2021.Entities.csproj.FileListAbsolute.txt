@@ -1,0 +1,5 @@
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Entities\bin\Release\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Entities\bin\Release\LibraryThreeLayer2021.Entities.pdb
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Entities\obj\Release\LibraryThreeLayer2021.Entities.csproj.CoreCompileInputs.cache
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Entities\obj\Release\LibraryThreeLayer2021.Entities.dll
+C:\Users\super\Documents\GitHub\SummerPracrice2021\LibraryThreeLayer2021\LibraryThreeLayer2021.Entities\obj\Release\LibraryThreeLayer2021.Entities.pdb
