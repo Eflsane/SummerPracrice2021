@@ -14,6 +14,12 @@ namespace LibraryThreeLayer2021.ConsolePL
 {
     class Program
     {
+        //Some comms about how this thing work
+        /*About bool functions
+         * For almost every function that returns bool value it means: "Are this function ready to close?", 
+         * except all sign-related fuctions for which it means "Is operation complited successfully?"
+         */
+
         private static ILogic _bll;
 
 
@@ -308,6 +314,11 @@ namespace LibraryThreeLayer2021.ConsolePL
                         while(!DrawBooksInterface());
                         return false;
                     }
+                case "2":
+                    {
+                        while (!DrawAuthorsInterface()) ;
+                        return false;
+                    }
                 case "6":
                     {
                         Environment.Exit(0);
@@ -369,7 +380,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 {
                     if (bookIndex > -1 && bookIndex < books.Count)
                     {
-                        DrawSingleBookInterface(books[bookIndex]);
+                        while(!DrawSingleBookInterface(books[bookIndex]));
                     }
                 }
             }
@@ -495,7 +506,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             {
                 if(bookIndex > -1 && bookIndex < searchResult.Count)
                 {
-                    DrawSingleBookInterface(searchResult[bookIndex]);
+                    while(!DrawSingleBookInterface(searchResult[bookIndex]));
                 }
             }
 
@@ -512,7 +523,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("Enter book description");
             string bookDesc = Console.ReadLine();
 
-            Console.WriteLine("Enter date of book publication()");
+            Console.WriteLine("Enter date of book publication(yyyy-mm-dd)");
             string dateString = Console.ReadLine();
             string format = "yyyy-MM-dd";
             DateTime pubDate;
@@ -575,7 +586,448 @@ namespace LibraryThreeLayer2021.ConsolePL
             }
         }
 
-        private static void DrawSingleBookInterface(Book book)
+        private static bool DrawSingleBookInterface(Book book)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Name: " + book.Name);
+
+            Author author = _bll.GetAuthorByID(book.AuthorID);
+            Console.WriteLine("Author: " + author.Secondname + " " + author.Firstname);
+
+            Console.WriteLine("Publication date: " + book.PublicationDate.Year);
+
+            List<Genre> genres = _bll.GetGenresOfBookById(book.ID);
+            string genresList = "";
+            foreach (Genre genre in genres) genresList += genre.Name + " | ";
+            Console.WriteLine("Genre: " + genresList);
+
+            Console.WriteLine("Description: " + book.Desc);
+
+            Console.WriteLine("X. Go back");
+            Console.WriteLine("1. Download book to your pc");
+            Console.WriteLine("2. Look for other books of this author");
+            Console.WriteLine("3. Choose genre from this book and find others with this genre");
+
+            if(user.IsAdmin)
+            {
+                Console.WriteLine("4. Change book attributes");
+                Console.WriteLine("5. Correct author's attributes");
+                Console.WriteLine("6. Change author to another");
+                Console.WriteLine("7. Add genre to book");
+                Console.WriteLine("8. Remove genre from book");
+            }
+
+            string input = Console.ReadLine().ToLower();
+
+            switch (input)
+            {
+                case "x":
+                    {
+                        return true;
+                    }
+                case "1":
+                    {
+                        Console.WriteLine("Choose folder for download");
+                        BookFileContainer container = _bll.GetBookFile(book.ID);
+
+                        FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                        folderBrowserDialog.Description = "Choose place to download";
+
+                        if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+                        {
+                            Console.WriteLine("Operation canceled. Return to HQ");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+
+                        container.FileName = folderBrowserDialog.SelectedPath + "\\" + container.FileName;
+
+                        try
+                        {
+                            _bll.ConvertByteArchToFileAndSave(container);
+                        }
+                        catch (DirectoryNotFoundException e)
+                        {
+                            Console.WriteLine(e.Message + ". Go back");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+                        Console.WriteLine("File downloaded succesfuly.");
+                        Console.WriteLine("Press any key");
+                        Console.ReadKey();
+                        return false;
+                    }
+                case "2":
+                    {
+                        //while (!DrawSingleAuthorInterface(author));
+                        return false;
+                    }
+                case "3":
+                    {
+                        Console.WriteLine("Type genre number to proceed or type something else to cancel");
+                        for(int i = 0; i < genres.Count; i++)
+                        {
+                            Console.WriteLine(i + ". " + genres[i].Name);
+                        }
+
+                        string genreNumber = Console.ReadLine();
+                        int genreIndex = -1;
+
+                        if(!int.TryParse(genreNumber, out genreIndex) || !(genreIndex > -1 && genreIndex < genres.Count))
+                        {
+                            Console.WriteLine("Operation canceled");
+                            Console.WriteLine("Press any key");
+                            Console.ReadKey();
+                            return false;
+                        }
+
+                        //while (!DrawSingleGenreInterface(genres[genreIndex]));
+                        return false;
+                    }
+                default:
+                    {
+                        if (!user.IsAdmin) return false;
+                        
+                        switch (input)
+                        {
+                            case "4":
+                                {
+                                    Console.WriteLine("Choose which attribute to change");
+                                    Console.WriteLine("1. Name");
+                                    Console.WriteLine("2. Description");
+                                    Console.WriteLine("3. Publication date");
+                                    Console.WriteLine("4. Book File");
+
+                                    switch(Console.ReadLine())
+                                    {
+                                        case "1":
+                                            {
+                                                Console.WriteLine("Enter new book name:");
+                                                string newName = Console.ReadLine();
+
+                                                if(newName.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if(!_bll.UpdateBook(book.ID, newName, book.Desc, book.PublicationDate, book.AuthorID))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+
+                                        case "2":
+                                            {
+                                                Console.WriteLine("Enter new book description:");
+                                                string newDesc = Console.ReadLine();
+
+                                                if (newDesc.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateBook(book.ID, book.Name, newDesc, book.PublicationDate, book.AuthorID))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "3":
+                                            {
+                                                Console.WriteLine("Enter new book publication date(yyyy-mm-dd):");
+                                                string stringDate = Console.ReadLine();
+
+                                                if (stringDate.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                string format = "yyyy-MM-dd";
+                                                DateTime pubDate;
+                                                if (!DateTime.TryParseExact(stringDate, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out pubDate))
+                                                {
+                                                    Console.WriteLine("Incorrect date! Abort mission!");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateBook(book.ID, book.Name, book.Desc, pubDate, book.AuthorID))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "4":
+                                            {
+                                                Console.WriteLine("Choose file with book");
+                                                OpenFileDialog openFileDialog = new OpenFileDialog();
+                                                openFileDialog.Title = "Choose file with book";
+
+                                                try
+                                                {
+                                                    if (openFileDialog.ShowDialog() != DialogResult.OK)
+                                                    {
+                                                        Console.WriteLine("Operation canceled. Return to HQ");
+                                                        Console.WriteLine("Press any key");
+                                                        Console.ReadKey();
+                                                        return false;
+                                                    }
+
+
+                                                    _bll.UpdateBookFie(book.ID, openFileDialog.FileName);
+                                                    Console.WriteLine("Changes successfully saved");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+                                                catch (FileNotFoundException e)
+                                                {
+                                                    Console.WriteLine("File not found. Abort mission!");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+                                            }
+                                        default:
+                                            {
+                                                Console.WriteLine("Operation canceled. Going back");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                    }
+                                }
+                            case "5":
+                                {
+                                    Console.WriteLine("Choose which attribute to change");
+                                    Console.WriteLine("1. Secondname");
+                                    Console.WriteLine("2. Firstname");
+
+
+                                    switch(Console.ReadLine())
+                                    {
+                                        case "1":
+                                            {
+                                                Console.WriteLine("Enter new author secondname:");
+                                                string newSecondname = Console.ReadLine();
+
+                                                if (newSecondname.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateAuthor(book.AuthorID, newSecondname, author.Firstname, author.BirthDate))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        case "2":
+                                            {
+                                                Console.WriteLine("Enter new author firstname:");
+                                                string newFirstname = Console.ReadLine();
+
+                                                if (newFirstname.Equals(string.Empty))
+                                                {
+                                                    Console.WriteLine("Empty string detected. Operation canceled");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                if (!_bll.UpdateAuthor(book.AuthorID, author.Secondname, newFirstname, author.BirthDate))
+                                                {
+                                                    Console.WriteLine("An error occured. Nothing happend");
+                                                    Console.WriteLine("Press any key");
+                                                    Console.ReadKey();
+                                                    return false;
+                                                }
+
+                                                Console.WriteLine("Changes successfully saved");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                        default:
+                                            {
+                                                Console.WriteLine("Operation canceled. Going back");
+                                                Console.WriteLine("Press any key");
+                                                Console.ReadKey();
+                                                return false;
+                                            }
+                                    }
+                                }
+                            case "6":
+                                {
+                                    Console.WriteLine("Search for new author for the book");
+                                    Console.WriteLine("Enter author secondname or firstname");
+                                    List<Author> authors = _bll.FindAuthors(Console.ReadLine());
+                                    if (authors.Count <= 0)
+                                    {
+                                        Console.WriteLine("No authors found. Maybe you want add one? Go to the 'Show me authors' menu");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+                                    for (int i = 0; i < authors.Count; i++)
+                                    {
+                                        Console.WriteLine(i + ". " + authors[i].Secondname + " " + authors[i].Firstname);
+                                    }
+                                    Console.WriteLine("Choose your author by typing his number in the list");
+                                    string listNumer = Console.ReadLine();
+                                    int listIndex = -1;
+                                    if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < authors.Count))
+                                    {
+                                        Console.WriteLine("Incorrect input! Abort mission!");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+
+                                    if(!_bll.UpdateBook(book.ID, book.Name, book.Desc, book.PublicationDate, authors[listIndex].ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Changes successfully saved");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            case "7":
+                                {
+                                    List<Genre> allGenres = _bll.GetAllGenres();
+                                    if (allGenres.Count <= 0)
+                                    {
+                                        Console.WriteLine("No genres found. Maybe you want add one? Go to the 'Show me genres' menu");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+                                    for (int i = 0; i < allGenres.Count; i++)
+                                    {
+                                        Console.WriteLine(i + ". " + allGenres[i].Name);
+                                    }
+                                    Console.WriteLine("Choose genre by typing it's number in the list");
+                                    string listNumer = Console.ReadLine();
+                                    int listIndex = -1;
+                                    if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < allGenres.Count))
+                                    {
+                                        Console.WriteLine("Incorrect input! Abort mission!");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    if(!_bll.AddGenreToBook(book.ID, allGenres[listIndex].ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Changes successfully saved");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            case "8":
+                                {
+                                    if(genres.Count <= 0)
+                                    {
+                                        Console.WriteLine("No genres attached to this book");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+                                    for(int i = 0; i < genres.Count; i++)
+                                    {
+                                        Console.WriteLine(i + ". " + genres[i].Name);
+                                    }
+                                    Console.WriteLine("Choose genre by typing it's number in the list");
+                                    string listNumer = Console.ReadLine();
+                                    int listIndex = -1;
+                                    if (!int.TryParse(listNumer, out listIndex) || !(listIndex > -1 && listIndex < genres.Count))
+                                    {
+                                        Console.WriteLine("Incorrect input! Abort mission!");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    if (!_bll.DeleteGenreFromBook(book.ID, genres[listIndex].ID))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Changes successfully saved");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            default:
+                                {
+                                    return false;
+                                }
+                        }
+                    }
+            }
+        }
+
+        private static bool DrawAuthorsInterface()
         {
             throw new NotImplementedException();
         }

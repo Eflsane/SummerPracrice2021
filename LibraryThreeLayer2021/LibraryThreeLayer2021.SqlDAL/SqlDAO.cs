@@ -981,6 +981,39 @@ namespace LibraryThreeLayer2021.DAL.SqlDAL
             }
         }
 
+        public IEnumerable<Genre> GetGenresOfBookById(long bookID)
+        {
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                var proc = "Get_genres_of_book_by_id";
+
+                var command = new SqlCommand(proc, _connection)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
+
+                command.Parameters.AddWithValue("@ID", bookID);
+
+                _connection.Open();
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    yield return new Genre
+                    (
+
+                        iD: (long)reader["ID"],
+                        name: reader["secondname"] as string,
+                        desc: reader["description"] as string
+                    );
+
+                }
+
+                yield break;
+            }
+        }
+
         public string GetTextOfBook(long bookID)
         {
             using (_connection = new SqlConnection(_connectionString))

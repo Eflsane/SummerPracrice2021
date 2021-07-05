@@ -81,6 +81,8 @@ namespace LibraryThreeLayer2021.BLL.InterfaceBLL
 
         Genre GetGenreByID(long genreID);
 
+        List<Genre> GetGenresOfBookById(long bookID);
+
         string GetTextOfBook(long bookID);
 
         User GetUserByName(string username);
@@ -91,7 +93,7 @@ namespace LibraryThreeLayer2021.BLL.InterfaceBLL
 
         bool UpdateBook(long ID, string name, string desc, DateTime publicationDate, long authorID);
 
-        bool UpdateBookFie(long ID, byte[] bookItself, string fileName);
+        bool UpdateBookFie(long ID, string fileName);
 
         bool UpdateBookText(long ID, string text);
 

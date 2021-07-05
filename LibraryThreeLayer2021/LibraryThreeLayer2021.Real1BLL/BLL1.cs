@@ -63,7 +63,7 @@ namespace LibraryThreeLayer2021.BLL.Real1BLL
 
         public bool ConvertByteArchToFileAndSave(BookFileContainer fileContainer)
         {
-            if (fileContainer?.FileName == null || fileContainer?.FileName == "") throw new InvalidOperationException("File path is invalid");
+            if (fileContainer?.FileName == null || fileContainer?.FileName == "") throw new DirectoryNotFoundException("File path is invalid");
 
 
             using(FileStream fs = new FileStream(fileContainer.FileName, FileMode.OpenOrCreate))
@@ -316,6 +316,18 @@ namespace LibraryThreeLayer2021.BLL.Real1BLL
             return _dao.GetGenreByID(genreID);
         }
 
+        public List<Genre> GetGenresOfBookById(long bookID)
+        {
+            List<Genre> genres = new List<Genre>();
+
+            foreach (Genre genre in _dao.GetGenresOfBookById(bookID))
+            {
+                genres.Add(genre);
+            }
+
+            return genres;
+        }
+
         public string GetTextOfBook(long bookID)
         {
             return _dao.GetTextOfBook(bookID);
@@ -341,9 +353,15 @@ namespace LibraryThreeLayer2021.BLL.Real1BLL
             return _dao.UpdateBook(ID, name, desc, publicationDate, authorID);
         }
 
-        public bool UpdateBookFie(long ID, byte[] bookItself, string fileName)
+        public bool UpdateBookFie(long ID, string fileName)
         {
-            return _dao.UpdateBookFie(ID, bookItself, fileName);
+            BookFileContainer fileContainer = null;
+            if (fileName != null)
+            {
+                fileContainer = ConvertFileToByteArch(fileName);
+            }
+
+            return _dao.UpdateBookFie(ID, fileContainer?.BookFile, fileContainer?.FileName);
         }
 
         public bool UpdateBookText(long ID, string text)

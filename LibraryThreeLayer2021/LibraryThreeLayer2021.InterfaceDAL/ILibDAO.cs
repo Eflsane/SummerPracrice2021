@@ -78,6 +78,8 @@ namespace LibraryThreeLayer2021.DAL.InterfaceDAL
 
         Genre GetGenreByID(long genreID);
 
+        IEnumerable<Genre> GetGenresOfBookById(long bookID);
+
         string GetTextOfBook(long bookID);
 
         User GetUserByName(string username);
