@@ -51,7 +51,7 @@ namespace LibraryThreeLayer2021.Common.Entities
 
         public override string ToString()
         {
-            return CustomName != null? CustomName: Username + (IsAdmin ? "Admin": "");
+            return ((CustomName != null? CustomName: Username) + (IsAdmin ? " Admin": ""));
         }
     }
 }

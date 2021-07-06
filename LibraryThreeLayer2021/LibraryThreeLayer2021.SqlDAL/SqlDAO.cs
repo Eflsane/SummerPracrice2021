@@ -696,7 +696,7 @@ namespace LibraryThreeLayer2021.DAL.SqlDAL
                     (
 
                         iD: (long)reader["ID"],
-                        name: reader["secondname"] as string,
+                        name: reader["name"] as string,
                         desc: reader["description"] as string
                     );
 
@@ -1004,7 +1004,7 @@ namespace LibraryThreeLayer2021.DAL.SqlDAL
                     (
 
                         iD: (long)reader["ID"],
-                        name: reader["secondname"] as string,
+                        name: reader["name"] as string,
                         desc: reader["description"] as string
                     );
 

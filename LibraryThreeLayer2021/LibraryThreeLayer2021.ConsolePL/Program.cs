@@ -170,42 +170,31 @@ namespace LibraryThreeLayer2021.ConsolePL
                 Console.WriteLine("Enter your password:");
                 string password = Console.ReadLine();
 
-                Console.WriteLine("Are you male or female? Type M or F(X for exit to main screen");
+                Console.WriteLine("Are you male or female? Type M or F(Type anything else for exit to start screen)");
                 bool sex = false;
-                try
-                {
-                    switch (Console.ReadLine().ToLower())
-                    {
-                        case "m":
-                            {
-                                sex = false;
-                                break;
-                            }
-                        case "f":
-                            {
-                                sex = true;
-                                break;
-                            }
-                        case "x":
-                            {
-                                return false;
-                            }
-                        default:
-                            {
-                                throw new ArgumentOutOfRangeException();
-                                break;
-                            }
-                    }
-                }
-                catch(ArgumentOutOfRangeException internalException)
-                {
 
+                switch (Console.ReadLine().ToLower())
+                {
+                    case "m":
+                        {
+                            sex = false;
+                            break;
+                        }
+                    case "f":
+                        {
+                            sex = true;
+                            break;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
                 }
 
                 Console.WriteLine("Do you want to hide yourself? Enter nickname(optional):");
                 string customName = Console.ReadLine();
 
-                if (!_bll.AddUser(username, password, sex, customName = customName.Equals("")? null: customName))
+                if (!_bll.AddUser(username, password, sex, customName = customName.Equals("")? null: customName, isAdmin: isAdminRegister))
                 {
                     Console.WriteLine("Error occured. Regestry not complete");
                     Console.WriteLine("Returning to main menu");
@@ -308,7 +297,8 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("6. Begone out of here");
             Console.WriteLine("7. Jump out from profile");
 
-            switch(Console.ReadLine())
+            string input = Console.ReadLine().ToLower();
+            switch (input)
             {
                 case "1":
                     {
@@ -347,6 +337,12 @@ namespace LibraryThreeLayer2021.ConsolePL
 
                 default:
                     {
+                        if(!user.IsAdmin) return false;
+
+                        if (!input.Equals("u")) return false;
+
+                        while (!DrawUsersInterface());
+
                         return false;
                     }
             }
@@ -406,6 +402,8 @@ namespace LibraryThreeLayer2021.ConsolePL
 
         private static bool DrawSearchBookBasicInterface()
         {
+            Console.Clear();
+
             Console.WriteLine("Choose search criteria");
             Console.WriteLine("1. By book name");
             Console.WriteLine("2. By auhtor");
@@ -644,17 +642,17 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("1. Download book to your pc");
             Console.WriteLine("2. Add book to favorite");
             Console.WriteLine("3. Remove book from favorite");
-            Console.WriteLine("3. Look for other books of this author");
-            Console.WriteLine("4. Choose genre from this book and find others with this genre");
+            Console.WriteLine("4. Look for other books of this author");
+            Console.WriteLine("5. Choose genre from this book and find others with this genre");
 
             if(user.IsAdmin)
             {
-                Console.WriteLine("5. Change book attributes");
-                Console.WriteLine("6. Correct author's attributes");
-                Console.WriteLine("7. Change author to another");
-                Console.WriteLine("8. Add genre to book");
-                Console.WriteLine("9. Remove genre from book");
-                Console.WriteLine("10. Delete book");
+                Console.WriteLine("6. Change book attributes");
+                Console.WriteLine("7. Correct author's attributes");
+                Console.WriteLine("8. Change author to another");
+                Console.WriteLine("9. Add genre to book");
+                Console.WriteLine("10. Remove genre from book");
+                Console.WriteLine("11. Delete book");
             }
 
             string input = Console.ReadLine().ToLower();
@@ -705,10 +703,12 @@ namespace LibraryThreeLayer2021.ConsolePL
                         {
                             Console.WriteLine("An error occured. Nothing happend");
                             Console.WriteLine("Press any key");
+                            Console.ReadKey();
                             return false;
                         }
                         Console.WriteLine("Book added to favorite");
                         Console.WriteLine("Press any key");
+                        Console.ReadKey();
                         return false;
                     }
                 case "3":
@@ -717,10 +717,12 @@ namespace LibraryThreeLayer2021.ConsolePL
                         {
                             Console.WriteLine("An error occured. This book is not in favorites of this user");
                             Console.WriteLine("Press any key");
+                            Console.ReadKey();
                             return false;
                         }
                         Console.WriteLine("Book removed from favorite");
                         Console.WriteLine("Press any key");
+                        Console.ReadKey();
                         return false;
                     }
                 case "4":
@@ -747,7 +749,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                             return false;
                         }
 
-                        //while (!DrawSingleGenreInterface(genres[genreIndex]));
+                        while (!DrawSingleGenreInterface(genres[genreIndex]));
                         return false;
                     }
                 default:
@@ -764,7 +766,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.WriteLine("3. Publication date");
                                     Console.WriteLine("4. Book File");
 
-                                    switch(Console.ReadLine())
+                                    switch(Console.ReadLine().ToLower())
                                     {
                                         case "1":
                                             {
@@ -790,6 +792,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                book.Name = newName;
                                                 return false;
                                             }
 
@@ -817,6 +821,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                book.Desc = newDesc;
                                                 return false;
                                             }
                                         case "3":
@@ -853,6 +859,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                book.PublicationDate = pubDate;
                                                 return false;
                                             }
                                         case "4":
@@ -902,7 +910,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.WriteLine("2. Firstname");
 
 
-                                    switch(Console.ReadLine())
+                                    switch(Console.ReadLine().ToLower())
                                     {
                                         case "1":
                                             {
@@ -1223,7 +1231,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 return;
             }
 
-            Console.WriteLine("Enter date of book publication(yyyy-mm-dd)");
+            Console.WriteLine("Enter author's date of birth(yyyy-mm-dd)");
             string dateString = Console.ReadLine();
             string format = "yyyy-MM-dd";
             DateTime birthDate;
@@ -1248,11 +1256,8 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.Clear();
 
             Console.WriteLine("Secondname: " + author.Secondname);
-
             Console.WriteLine("Firstname: " + author.Firstname);
-
-            Console.WriteLine("Birth date: " + author.BirthDate.Year + " " + author.BirthDate.Month + " " + author.BirthDate.Day);
-
+            Console.WriteLine("Birth date: " + author.BirthDate.Year + "." + author.BirthDate.Month + "." + author.BirthDate.Day);
             Console.WriteLine("X. Go back");
 
             if(user.IsAdmin)
@@ -1262,8 +1267,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                 Console.WriteLine("C. Correct author's attributes");
                 Console.WriteLine("D. Delete author");
             }
-            
 
+            Console.WriteLine("Books");
             List<Book> books = _bll.GetBooksByAuthorID(author.ID);
             if(books.Count <= 0)
             {
@@ -1375,6 +1380,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                author.Secondname = newSecondname;
                                                 return false;
                                             }
                                         case "2":
@@ -1401,6 +1408,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                author.Firstname = newFirstname;
                                                 return false;
                                             }
                                         case "3":
@@ -1437,6 +1446,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                author.BirthDate = birthDate;
                                                 return false;
                                             }
                                         default:
@@ -1559,6 +1570,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             }
 
 
+            Console.WriteLine("Books");
             List<Book> books = _bll.GetBooksByGenreID(genre.ID);
             if (books.Count <= 0)
             {
@@ -1628,6 +1640,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                genre.Name = newName;
                                                 return false;
                                             }
                                         case "2":
@@ -1654,6 +1668,8 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                 Console.WriteLine("Changes successfully saved");
                                                 Console.WriteLine("Press any key");
                                                 Console.ReadKey();
+
+                                                genre.Desc = newDesc;
                                                 return false;
                                             }
                                         default:
@@ -1798,7 +1814,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "1":
                     {
-                        while(!DrawSingleUserInterface(watchedUser));
+                        while(!DrawFavoriteBooksOfUser(watchedUser));
                         return false;
                     }
                 case "2":
@@ -1806,6 +1822,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                         Console.WriteLine("Choose which attribute to change");
                         Console.WriteLine("1. Custom name");
                         Console.WriteLine("2. Sex");
+                        Console.WriteLine("3. Password");
 
 
                         switch (Console.ReadLine())
@@ -1831,6 +1848,9 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     Console.WriteLine("Changes successfully saved");
                                     Console.WriteLine("Press any key");
                                     Console.ReadKey();
+
+                                    watchedUser.CustomName = newCustomName;
+                                    if (user.Username.Equals(watchedUser.Username)) user.CustomName = newCustomName;
                                     return false;
                                 }
                             case "2":
@@ -1869,7 +1889,35 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         return false;
                                     }
 
+                                    watchedUser.Sex = newSex;
+                                    if (user.Username.Equals(watchedUser.Username)) user.Sex = newSex;
                                     Console.WriteLine("Sex successfully switched");
+                                    Console.WriteLine("Press any key");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                            case "3":
+                                {
+                                    Console.WriteLine("Enter new password:");
+                                    string newPass = Console.ReadLine();
+
+                                    if (newPass.Equals(string.Empty))
+                                    {
+                                        Console.WriteLine("Empty string detected. Operation canceled");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    if (!_bll.UpdateUserPass(watchedUser.Username, newPass))
+                                    {
+                                        Console.WriteLine("An error occured. Nothing happend");
+                                        Console.WriteLine("Press any key");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+
+                                    Console.WriteLine("Changes successfully saved");
                                     Console.WriteLine("Press any key");
                                     Console.ReadKey();
                                     return false;
@@ -1904,6 +1952,44 @@ namespace LibraryThreeLayer2021.ConsolePL
                         return false;
                     }
             }
+        }
+
+        private static bool DrawUsersInterface()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Doom library ");
+            Console.WriteLine("Welcome " + user);
+            Console.WriteLine("X. Back to main screen");
+
+            List<User> users = _bll.GetAllUsers();
+
+            if (users.Count <= 0) Console.WriteLine("No users in library registered ERROR!");
+            else
+            {
+                for (int i = 0; i < users.Count; i++)
+                {
+                    Console.WriteLine(i + ". " + users[i] + " " + users[i].RegDate);
+                }
+            }
+
+            string input = Console.ReadLine().ToLower();
+
+            if (input == "x") return true;
+
+            else
+            {
+                int userIndex = -1;
+                if (int.TryParse(input, out userIndex))
+                {
+                    if (userIndex > -1 && userIndex < users.Count)
+                    {
+                        while (!DrawSingleUserInterface(users[userIndex])) ;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
