@@ -21,6 +21,12 @@ namespace LibraryThreeLayer2021.ConsolePL
          */
 
         private static ILogic _bll;
+        private static IAuthorLogic _authorBLL;
+        private static IBookLogic _bookBLL;
+        private static IBookGenresLogic _bookGenresBLL;
+        private static IGenreLogic _genreBLL;
+        private static IUserLogic _userBLL;
+        private static IUserFavBookLogic _userFavBookBLL;
 
 
         private static User user;
@@ -28,57 +34,63 @@ namespace LibraryThreeLayer2021.ConsolePL
         [STAThread]
         static void Main(string[] args)
         {
-           _bll = DependencyResolver.Instance.BLL;
+            _bll = DependencyResolver.Instance.BLL;
+            _authorBLL = DependencyResolver.Instance.AuthorBLL;
+            _bookBLL = DependencyResolver.Instance.BookBLL;
+            _bookGenresBLL = DependencyResolver.Instance.BookGenresBLL;
+            _genreBLL = DependencyResolver.Instance.GenreBLL;
+            _userBLL = DependencyResolver.Instance.UserBLL;
+            _userFavBookBLL = DependencyResolver.Instance.UserFavBookBLL;
 
 
-            /*Console.WriteLine(_bll.GetUserByNameAndPass("mouth", "1234"));
-            Console.WriteLine(_bll.GetUserByNameAndPass("mouth", "1234"));
+        /*Console.WriteLine(_bll.GetUserByNameAndPass("mouth", "1234"));
+        Console.WriteLine(_bll.GetUserByNameAndPass("mouth", "1234"));
 
-            try
-            {
-                Console.WriteLine(_bll.GetUserByName("mouth"));
-            }
-            catch(ArgumentException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            Console.ReadKey(); */
-
-
-            //Saving to BD
-            /*OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.ShowDialog();
+        try
+        {
+            Console.WriteLine(_bll.GetUserByName("mouth"));
+        }
+        catch(ArgumentException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        Console.ReadKey(); */
 
 
-            Console.WriteLine(_bll.AddBook("Patato attack!", "Desc", new DateTime(2001, 04, 12), "mouth", 1, null, openFileDialog.FileName));
-            */
+        //Saving to BD
+        /*OpenFileDialog openFileDialog = new OpenFileDialog();
+
+        openFileDialog.ShowDialog();
 
 
-            //Loading and saving file from BD
-            /*BookFileContainer container = _bll.GetBookFile(2);
+        Console.WriteLine(_bll.AddBook("Patato attack!", "Desc", new DateTime(2001, 04, 12), "mouth", 1, null, openFileDialog.FileName));
+        */
 
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
-            folderBrowserDialog.ShowDialog();
+        //Loading and saving file from BD
+        /*BookFileContainer container = _bll.GetBookFile(2);
 
-            container.FileName = folderBrowserDialog.SelectedPath + "\\" + container.FileName;
+        FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
-            Console.WriteLine(_bll.ConvertByteArchToFileAndSave(container));
+        folderBrowserDialog.ShowDialog();
 
-            */
+        container.FileName = folderBrowserDialog.SelectedPath + "\\" + container.FileName;
 
-            //Reading date from console in custom format
-            /*string s = Console.ReadLine();
-            string format = "yyyy-MM-dd";
-            DateTime dateTime;
-            Console.WriteLine(DateTime.TryParseExact(s, format, new CultureInfo("en-US"), DateTimeStyles.None, out dateTime));
+        Console.WriteLine(_bll.ConvertByteArchToFileAndSave(container));
 
-            Console.WriteLine(dateTime);
+        */
 
-            Console.ReadKey();*/
+        //Reading date from console in custom format
+        /*string s = Console.ReadLine();
+        string format = "yyyy-MM-dd";
+        DateTime dateTime;
+        Console.WriteLine(DateTime.TryParseExact(s, format, new CultureInfo("en-US"), DateTimeStyles.None, out dateTime));
 
-            DrawAndProcessInterface();
+        Console.WriteLine(dateTime);
+
+        Console.ReadKey();*/
+
+        DrawAndProcessInterface();
 
         }
 
@@ -157,7 +169,7 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             try
             {
-                _bll.GetUserByName(username);
+                _userBLL.GetUserByName(username);
                 Console.WriteLine("This user already exist. Do you have a brain illness?");
                 Console.WriteLine("Returning to main menu");
                 Console.WriteLine("Press a key");
@@ -194,7 +206,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 Console.WriteLine("Do you want to hide yourself? Enter nickname(optional):");
                 string customName = Console.ReadLine();
 
-                if (!_bll.AddUser(username, password, sex, customName = customName.Equals("")? null: customName, isAdmin: isAdminRegister))
+                if (!_userBLL.AddUser(username, password, sex, customName = customName.Equals("")? null: customName, isAdmin: isAdminRegister))
                 {
                     Console.WriteLine("Error occured. Regestry not complete");
                     Console.WriteLine("Returning to main menu");
@@ -205,7 +217,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 }
 
 
-                user = _bll.GetUserByName(username);
+                user = _userBLL.GetUserByName(username);
                 
                 Console.WriteLine("Register complete ");
                 Console.WriteLine("Doom is awaiting of you, user ");
@@ -228,13 +240,13 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             try
             {
-                _bll.GetUserByName(username);
+                _userBLL.GetUserByName(username);
 
                 Console.WriteLine("Enter your password:");
 
                 string password = Console.ReadLine();
 
-                if(!_bll.GetUserByNameAndPass(username, password))
+                if(!_userBLL.GetUserByNameAndPass(username, password))
                 {
                     Console.WriteLine("Incorrect password");
                     Console.WriteLine("Returning to main menu");
@@ -243,7 +255,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     return false;
                 }
 
-                user = _bll.GetUserByName(username);
+                user = _userBLL.GetUserByName(username);
 
                 return true;
             }
@@ -267,7 +279,7 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             string adminPass = Console.ReadLine();
 
-            if (!_bll.CheckAdminPass(adminPass))
+            if (!_userBLL.CheckAdminPass(adminPass))
             {
                 Console.WriteLine("Incorrect password");
                 Console.WriteLine("Returning to main menu");
@@ -357,7 +369,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("X. Back to main screen");
             Console.WriteLine("F. Find books by criteria");
 
-            List<Book> books = _bll.GetAllBooks();
+            List<Book> books = _bookBLL.GetAllBooks();
             if (user.IsAdmin)
             {
                 Console.WriteLine("A. Add book");
@@ -369,7 +381,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 for (int i = 0; i < books.Count; i++)
                 {
 
-                    Author author = _bll.GetAuthorByID(books[i].AuthorID);
+                    Author author = _authorBLL.GetAuthorByID(books[i].AuthorID);
                     Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " - " + books[i].Name);
                 }
             }
@@ -421,26 +433,26 @@ namespace LibraryThreeLayer2021.ConsolePL
                     {
                         Console.WriteLine("Enter book's name");
                         searchQuerry = Console.ReadLine();
-                        searchResult = _bll.FindBooksByName(searchQuerry);
+                        searchResult = _bookBLL.FindBooksByName(searchQuerry);
                         break;
                     }
                 case "2":
                     {
                         Console.WriteLine("Enter author firstname or secondname:");
                         searchQuerry = Console.ReadLine();
-                        searchResult = _bll.FindBooksByAuthor(searchQuerry);
+                        searchResult = _bookBLL.FindBooksByAuthor(searchQuerry);
                         break;
                     }
                 case "3":
                     {
                         Console.WriteLine("Available genres:");
-                        foreach (Genre genre in _bll.GetAllGenres())
+                        foreach (Genre genre in _genreBLL.GetAllGenres())
                         {
                             Console.WriteLine(genre.Name);
                         }
                         Console.WriteLine("Enter genre:");
                         searchQuerry = Console.ReadLine();
-                        searchResult = _bll.FindBooksByAuthor(searchQuerry);
+                        searchResult = _bookBLL.FindBooksByAuthor(searchQuerry);
                         break;
                     }
                 case "4":
@@ -455,7 +467,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                             return false;
                         }
 
-                        searchResult = _bll.FindBooksByYear(year);
+                        searchResult = _bookBLL.FindBooksByYear(year);
                         break;
                     }
                 case "5":
@@ -480,7 +492,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                             return false;
                         }
 
-                        searchResult = _bll.FindBooksByYearMultiple(year1, year2);
+                        searchResult = _bookBLL.FindBooksByYearMultiple(year1, year2);
                         break;
                     }
                 case "x":
@@ -508,7 +520,7 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             for(int i = 0; i < searchResult.Count; i++)
             {
-                Author author = _bll.GetAuthorByID(searchResult[i].AuthorID);
+                Author author = _authorBLL.GetAuthorByID(searchResult[i].AuthorID);
                 Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " - " + searchResult[i].Name);
             }
 
@@ -562,7 +574,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             {
                 Console.WriteLine("Search for which author book will be added");
                 Console.WriteLine("Enter author secondname or firstname");
-                List<Author> authors = _bll.FindAuthors(Console.ReadLine());
+                List<Author> authors = _authorBLL.FindAuthors(Console.ReadLine());
                 if (authors.Count <= 0)
                 {
                     Console.WriteLine("No authors found. Maybe you want add one? Go to the 'Show me authors' menu");
@@ -604,7 +616,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 }
 
 
-                if(!_bll.AddBook(bookName, bookDesc, pubDate, user.Username, authorID, fileName: openFileDialog.FileName))
+                if(!_bookBLL.AddBook(bookName, bookDesc, pubDate, user.Username, authorID, fileName: openFileDialog.FileName))
                 {
                     Console.WriteLine("An error occured. Abort mission!");
                     Console.WriteLine("Press any key");
@@ -626,12 +638,12 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             Console.WriteLine("Name: " + book.Name);
 
-            Author author = _bll.GetAuthorByID(book.AuthorID);
+            Author author = _authorBLL.GetAuthorByID(book.AuthorID);
             Console.WriteLine("Author: " + author.Secondname + " " + author.Firstname);
 
             Console.WriteLine("Publication date: " + book.PublicationDate.Year);
 
-            List<Genre> genres = _bll.GetGenresOfBookById(book.ID);
+            List<Genre> genres = _genreBLL.GetGenresOfBookById(book.ID);
             string genresList = "";
             foreach (Genre genre in genres) genresList += genre.Name + " | ";
             Console.WriteLine("Genre: " + genresList);
@@ -666,7 +678,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 case "1":
                     {
                         Console.WriteLine("Choose folder for download");
-                        BookFileContainer container = _bll.GetBookFile(book.ID);
+                        BookFileContainer container = _bookBLL.GetBookFile(book.ID);
 
                         FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
                         folderBrowserDialog.Description = "Choose place to download";
@@ -699,7 +711,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "2":
                     {
-                        if(!_bll.AddBookToFavorite(user.Username, book.ID))
+                        if(!_userFavBookBLL.AddBookToFavorite(user.Username, book.ID))
                         {
                             Console.WriteLine("An error occured. Nothing happend");
                             Console.WriteLine("Press any key");
@@ -713,7 +725,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "3":
                     {
-                        if (!_bll.DeleteFavBookFromUser(user.Username, book.ID))
+                        if (!_userFavBookBLL.DeleteFavBookFromUser(user.Username, book.ID))
                         {
                             Console.WriteLine("An error occured. This book is not in favorites of this user");
                             Console.WriteLine("Press any key");
@@ -781,7 +793,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if(!_bll.UpdateBook(book.ID, newName, book.Desc, book.PublicationDate, book.AuthorID))
+                                                if(!_bookBLL.UpdateBook(book.ID, newName, book.Desc, book.PublicationDate, book.AuthorID))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -810,7 +822,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateBook(book.ID, book.Name, newDesc, book.PublicationDate, book.AuthorID))
+                                                if (!_bookBLL.UpdateBook(book.ID, book.Name, newDesc, book.PublicationDate, book.AuthorID))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -848,7 +860,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateBook(book.ID, book.Name, book.Desc, pubDate, book.AuthorID))
+                                                if (!_bookBLL.UpdateBook(book.ID, book.Name, book.Desc, pubDate, book.AuthorID))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -880,7 +892,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     }
 
 
-                                                    _bll.UpdateBookFie(book.ID, openFileDialog.FileName);
+                                                    _bookBLL.UpdateBookFie(book.ID, openFileDialog.FileName);
                                                     Console.WriteLine("Changes successfully saved");
                                                     Console.WriteLine("Press any key");
                                                     Console.ReadKey();
@@ -925,7 +937,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateAuthor(book.AuthorID, newSecondname, author.Firstname, author.BirthDate))
+                                                if (!_authorBLL.UpdateAuthor(book.AuthorID, newSecondname, author.Firstname, author.BirthDate))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -951,7 +963,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateAuthor(book.AuthorID, author.Secondname, newFirstname, author.BirthDate))
+                                                if (!_authorBLL.UpdateAuthor(book.AuthorID, author.Secondname, newFirstname, author.BirthDate))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -977,7 +989,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                 {
                                     Console.WriteLine("Search for new author for the book");
                                     Console.WriteLine("Enter author secondname or firstname");
-                                    List<Author> authors = _bll.FindAuthors(Console.ReadLine());
+                                    List<Author> authors = _authorBLL.FindAuthors(Console.ReadLine());
                                     if (authors.Count <= 0)
                                     {
                                         Console.WriteLine("No authors found. Maybe you want add one? Go to the 'Show me authors' menu");
@@ -1001,7 +1013,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                     }
 
 
-                                    if(!_bll.UpdateBook(book.ID, book.Name, book.Desc, book.PublicationDate, authors[listIndex].ID))
+                                    if(!_bookBLL.UpdateBook(book.ID, book.Name, book.Desc, book.PublicationDate, authors[listIndex].ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1016,7 +1028,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                 }
                             case "9":
                                 {
-                                    List<Genre> allGenres = _bll.GetAllGenres();
+                                    List<Genre> allGenres = _genreBLL.GetAllGenres();
                                     if (allGenres.Count <= 0)
                                     {
                                         Console.WriteLine("No genres found. Maybe you want add one? Go to the 'Show me genres' menu");
@@ -1039,7 +1051,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         return false;
                                     }
 
-                                    if(!_bll.AddGenreToBook(book.ID, allGenres[listIndex].ID))
+                                    if(!_bookGenresBLL.AddGenreToBook(book.ID, allGenres[listIndex].ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1076,7 +1088,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         return false;
                                     }
 
-                                    if (!_bll.DeleteGenreFromBook(book.ID, genres[listIndex].ID))
+                                    if (!_bookGenresBLL.DeleteGenreFromBook(book.ID, genres[listIndex].ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1091,7 +1103,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                 }
                             case "11":
                                 {
-                                    if(!_bll.DeleteBookByID(book.ID))
+                                    if(!_bookBLL.DeleteBookByID(book.ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1122,7 +1134,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("X. Back to main screen");
             Console.WriteLine("F. Find authors");
 
-            List<Author> authors = _bll.GetAllAuthors();
+            List<Author> authors = _authorBLL.GetAllAuthors();
             if (user.IsAdmin)
             {
                 Console.WriteLine("A. Add author");
@@ -1171,7 +1183,7 @@ namespace LibraryThreeLayer2021.ConsolePL
 
             Console.WriteLine("Enter author firstname or secondname:");
             searchQuerry = Console.ReadLine();
-            searchResult = _bll.FindAuthors(searchQuerry);
+            searchResult = _authorBLL.FindAuthors(searchQuerry);
 
 
             Console.Clear();
@@ -1243,7 +1255,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                 return;
             }
 
-             if(!_bll.AddAuthor(authorSecondname, authorFirstname, birthDate))
+             if(!_authorBLL.AddAuthor(authorSecondname, authorFirstname, birthDate))
             {
                 Console.WriteLine("An error occured. Abort mission!");
                 Console.WriteLine("Press any key");
@@ -1269,7 +1281,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             }
 
             Console.WriteLine("Books");
-            List<Book> books = _bll.GetBooksByAuthorID(author.ID);
+            List<Book> books = _bookBLL.GetBooksByAuthorID(author.ID);
             if(books.Count <= 0)
             {
                 Console.WriteLine("This author doesn't have published books yet");
@@ -1333,7 +1345,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         return false;
                                     }
 
-                                    if (!_bll.DeleteBookByID(books[listIndex].ID))
+                                    if (!_bookBLL.DeleteBookByID(books[listIndex].ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1369,7 +1381,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateAuthor(author.ID, newSecondname, author.Firstname, author.BirthDate))
+                                                if (!_authorBLL.UpdateAuthor(author.ID, newSecondname, author.Firstname, author.BirthDate))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -1397,7 +1409,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateAuthor(author.ID, author.Secondname, newFirstname, author.BirthDate))
+                                                if (!_authorBLL.UpdateAuthor(author.ID, author.Secondname, newFirstname, author.BirthDate))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -1435,7 +1447,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateAuthor(author.ID, author.Secondname, author.Firstname, birthDate))
+                                                if (!_authorBLL.UpdateAuthor(author.ID, author.Secondname, author.Firstname, birthDate))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -1461,7 +1473,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                 }
                             case "d":
                                 {
-                                    if(!_bll.DeleteAuthor(author.ID))
+                                    if(!_authorBLL.DeleteAuthor(author.ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1491,7 +1503,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("Welcome " + user);
             Console.WriteLine("X. Back to main screen");
 
-            List<Genre> genres = _bll.GetAllGenres();
+            List<Genre> genres = _genreBLL.GetAllGenres();
             if (user.IsAdmin)
             {
                 Console.WriteLine("A. Add genre");
@@ -1545,7 +1557,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("Enter genre description");
             string genreDesc = Console.ReadLine();
 
-            if (!_bll.AddGenre(genreName, genreDesc))
+            if (!_genreBLL.AddGenre(genreName, genreDesc))
             {
                 Console.WriteLine("An error occured. Abort mission!");
                 Console.WriteLine("Press any key");
@@ -1571,7 +1583,7 @@ namespace LibraryThreeLayer2021.ConsolePL
 
 
             Console.WriteLine("Books");
-            List<Book> books = _bll.GetBooksByGenreID(genre.ID);
+            List<Book> books = _bookBLL.GetBooksByGenreID(genre.ID);
             if (books.Count <= 0)
             {
                 Console.WriteLine("There is no books of this genre yet");
@@ -1580,7 +1592,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             {
                 for (int i = 0; i < books.Count; i++)
                 {
-                    Author author = _bll.GetAuthorByID(books[i].AuthorID);
+                    Author author = _authorBLL.GetAuthorByID(books[i].AuthorID);
                     Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " " + books[i].Name + " " + books[i].PublicationDate.Year);
                 }
             }
@@ -1629,7 +1641,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateGenre(genre.ID, newName, genre.Desc))
+                                                if (!_genreBLL.UpdateGenre(genre.ID, newName, genre.Desc))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -1657,7 +1669,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                                     return false;
                                                 }
 
-                                                if (!_bll.UpdateGenre(genre.ID, genre.Name, newDesc))
+                                                if (!_genreBLL.UpdateGenre(genre.ID, genre.Name, newDesc))
                                                 {
                                                     Console.WriteLine("An error occured. Nothing happend");
                                                     Console.WriteLine("Press any key");
@@ -1683,7 +1695,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                 }
                             case "d":
                                 {
-                                    if (!_bll.DeleteGenre(genre.ID))
+                                    if (!_genreBLL.DeleteGenre(genre.ID))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1713,7 +1725,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("X. Go back");
             Console.WriteLine("R. Remove a book from favorites");
 
-            List<Book> favBooks = _bll.GetFavBooksOfUser(user.Username);
+            List<Book> favBooks = _userFavBookBLL.GetFavBooksOfUser(user.Username);
             if(favBooks.Count <= 0)
             {
                 Console.WriteLine("This user does't have favorite books");
@@ -1722,7 +1734,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             {
                 for(int i = 0; i < favBooks.Count; i++)
                 {
-                    Author author = _bll.GetAuthorByID(favBooks[i].AuthorID);
+                    Author author = _authorBLL.GetAuthorByID(favBooks[i].AuthorID);
                     Console.WriteLine(i + ". " + author.Secondname + " " + author.Firstname + " " + favBooks[i].Name + " " + favBooks[i].PublicationDate.Year);
                 }
             }
@@ -1760,7 +1772,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                             return false;
                         }
 
-                        if (!_bll.DeleteFavBookFromUser(user.Username, favBooks[listIndex].ID))
+                        if (!_userFavBookBLL.DeleteFavBookFromUser(user.Username, favBooks[listIndex].ID))
                         {
                             Console.WriteLine("An error occured. This book is not in favorites of this user");
                             Console.WriteLine("Press any key");
@@ -1837,7 +1849,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         newCustomName = null;
                                     }
 
-                                    if (!_bll.UpdateUser(watchedUser.Username, watchedUser.Sex, newCustomName))
+                                    if (!_userBLL.UpdateUser(watchedUser.Username, watchedUser.Sex, newCustomName))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1881,7 +1893,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                             }
                                     }
 
-                                    if (!_bll.UpdateUser(watchedUser.Username, newSex, watchedUser.CustomName))
+                                    if (!_userBLL.UpdateUser(watchedUser.Username, newSex, watchedUser.CustomName))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1909,7 +1921,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                                         return false;
                                     }
 
-                                    if (!_bll.UpdateUserPass(watchedUser.Username, newPass))
+                                    if (!_userBLL.UpdateUserPass(watchedUser.Username, newPass))
                                     {
                                         Console.WriteLine("An error occured. Nothing happend");
                                         Console.WriteLine("Press any key");
@@ -1933,7 +1945,7 @@ namespace LibraryThreeLayer2021.ConsolePL
                     }
                 case "3":
                     {
-                        if(!_bll.DeleteUser(watchedUser.Username))
+                        if(!_userBLL.DeleteUser(watchedUser.Username))
                         {
                             Console.WriteLine("An error occured. Nothing happend");
                             Console.WriteLine("Press any key");
@@ -1962,7 +1974,7 @@ namespace LibraryThreeLayer2021.ConsolePL
             Console.WriteLine("Welcome " + user);
             Console.WriteLine("X. Back to main screen");
 
-            List<User> users = _bll.GetAllUsers();
+            List<User> users = _userBLL.GetAllUsers();
 
             if (users.Count <= 0) Console.WriteLine("No users in library registered ERROR!");
             else

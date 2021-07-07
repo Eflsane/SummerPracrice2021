@@ -41,7 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAuthorDAO.cs" />
+    <Compile Include="IBookDAO.cs" />
+    <Compile Include="IBookGenresDAO.cs" />
+    <Compile Include="IGenreDAO.cs" />
     <Compile Include="ILibDAO.cs" />
+    <Compile Include="IUserDAO.cs" />
+    <Compile Include="IUserFavBookDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,25 @@ namespace LibraryThreeLayer2021.Common.Dependencies
             }
         }
 
-        public ILibDAO DAO => new SqlDAO();
-        public ILogic BLL => new BLL1(DAO);
+        private ILibDAO DAO => new SqlDAO();
+        public ILogic BLL => new BLL1();
+
+        private IAuthorDAO AuthorDAO => new SqlAuthorDAO();
+        public IAuthorLogic AuthorBLL => new AuthorBLL1(AuthorDAO);
+
+        private IBookDAO BookDAO => new SqlBookDAO();
+        public IBookLogic BookBLL => new BookBLL1(BookDAO);
+
+        private IBookGenresDAO BookGenresDAO => new SqlBookGenresDAO();
+        public IBookGenresLogic BookGenresBLL => new BookGenresBLL1(BookGenresDAO);
+
+        private IGenreDAO GenreDAO => new SqlGenreDAO();
+        public IGenreLogic GenreBLL => new GenreBLL1(GenreDAO);
+
+        private IUserDAO UserDAO => new SqlUserDAO();
+        public IUserLogic UserBLL => new UserBLL1(UserDAO);
+
+        private IUserFavBookDAO UserFavBookDAO => new SqlUserFavBookDAO();
+        public IUserFavBookLogic UserFavBookBLL => new UserFavBookBLL1(UserFavBookDAO);
     }
 }

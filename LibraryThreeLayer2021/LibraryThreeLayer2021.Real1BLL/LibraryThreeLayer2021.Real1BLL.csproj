@@ -41,8 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorBLL1.cs" />
     <Compile Include="BLL1.cs" />
+    <Compile Include="BookBLL1.cs" />
+    <Compile Include="BookGenresBLL1.cs" />
+    <Compile Include="GenreBLL1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserBLL1.cs" />
+    <Compile Include="UserFavBookBLL1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibraryThreeLayer2021.Entities\LibraryThreeLayer2021.Entities.csproj">

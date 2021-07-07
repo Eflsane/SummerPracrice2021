@@ -43,7 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlAuthorDAO.cs" />
+    <Compile Include="SqlBookDAO.cs" />
+    <Compile Include="SqlBookGenresDAO.cs" />
     <Compile Include="SqlDAO.cs" />
+    <Compile Include="SqlGenreDAO.cs" />
+    <Compile Include="SqlUserDAO.cs" />
+    <Compile Include="SqlUserFavBookDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibraryThreeLayer2021.Entities\LibraryThreeLayer2021.Entities.csproj">
